@@ -115,14 +115,14 @@
     <div class="section">
         <label>🎁 代購品項</label>
         <select id="category" onchange="updateRateOptions()">
-            <option value="1" data-rates="5,6,7,8">1. 玩偶類 (5-8%)</option>
-            <option value="2" data-rates="8,9,10,12,15">2. 咖啡廳周邊 (8-15%)</option>
-            <option value="3" data-rates="5,6,7,8">3. 文創小吊飾 (5-8%)</option>
+            <option value="1" data-rates="5,8">1. 玩偶類 (5-8%)</option>
+            <option value="2" data-rates="8,10,15">2. 咖啡廳周邊 (8-15%)</option>
+            <option value="3" data-rates="5,8">3. 文創小吊飾 (5-8%)</option>
             <option value="4" data-rates="5">4. 明信片/貼紙 (5%)</option>
-            <option value="5" data-rates="5,6,7,8">5. 大創限定 (5-8%)</option>
-            <option value="6" data-rates="8,9,10">6. Olive Young (8-10%)</option>
-            <option value="9" data-rates="8,9,10">9. 杯盤 (請加處理費)</option>
-            <option value="11" data-rates="10,12,15">11. romand 限定 (10-15%)</option>
+            <option value="5" data-rates="5,8">5. 大創限定 (5-8%)</option>
+            <option value="6" data-rates="8,10">6. Olive Young (8-10%)</option>
+            <option value="9" data-rates="8,10">9. 杯盤 (請加處理費)</option>
+            <option value="11" data-rates="10,12">11. romand 限定 (10-12%)</option>
             <option value="13" data-rates="10,12">13. 鞋類/重物 (10-12%)</option>
         </select>
     </div>
@@ -136,7 +136,7 @@
             </label>
         </div>
         <div id="customRateBox" class="custom-fee-box">
-            <input type="number" id="customRateInput" placeholder="輸入費率 (例如 12)" oninput="calculate()">
+            <input type="number" id="customRateInput" inputmode="numeric" placeholder="輸入費率 (例如 12)" oninput="calculate()">
         </div>
     </div>
 
