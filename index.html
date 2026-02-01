@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>韓國連線代購計算機</title>
+    <title>韓國連線代購計算機 V3.1</title>
     <style>
         :root {
             --primary-pink: #fff5f5;
@@ -12,6 +12,7 @@
             --text-gray: #555;
             --warning-red: #ff4d4d;
             --formula-blue: #5a8ab9;
+            --profit-green: #2e7d32;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -42,7 +43,6 @@
             font-size: 1rem;
             box-sizing: border-box;
             outline: none;
-            transition: all 0.3s;
             -webkit-appearance: none;
         }
         input:focus { border-color: var(--accent-pink); background: #fffdfd; }
@@ -50,11 +50,7 @@
         .row { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
         .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; }
         
-        input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--accent-pink);
-        }
+        input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-pink); }
 
         .result-card {
             background: var(--soft-gray);
@@ -66,9 +62,37 @@
         .price-tag { font-size: 2.2rem; color: #333; font-weight: 800; text-align: center; margin: 10px 0; }
         .price-tag span { font-size: 1rem; margin-left: 5px; color: #666; }
         
-        .tip { font-size: 0.85rem; color: #888; line-height: 1.6; }
-        .warning { color: var(--warning-red); font-weight: bold; font-size: 0.8rem; display: none; margin-top: 5px; }
-        
+        /* 報價明細樣式 */
+        .detail-text {
+            font-size: 0.85rem;
+            color: #888;
+            line-height: 1.6;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* 淨利展開區樣式 */
+        details {
+            margin-top: 15px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            overflow: hidden;
+        }
+        summary {
+            padding: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--profit-green);
+            cursor: pointer;
+            list-style: none;
+            text-align: center;
+            background: #f1f8f1;
+        }
+        .profit-content { padding: 15px; font-size: 0.85rem; line-height: 1.8; }
+        .profit-line { display: flex; justify-content: space-between; margin-bottom: 4px; }
+
         .formula-box {
             margin-top: 15px;
             padding: 12px;
@@ -77,26 +101,15 @@
             font-family: monospace;
             font-size: 0.75rem;
             color: var(--formula-blue);
-            line-height: 1.4;
             word-break: break-all;
         }
-
         .custom-fee-box, .shipping-box { 
-            display: none; 
-            margin-top: 10px; 
-            padding: 10px;
-            background: #fffafa;
-            border-radius: 12px;
-            border: 1px solid #ffecec;
+            display: none; margin-top: 10px; padding: 10px;
+            background: #fffafa; border-radius: 12px; border: 1px solid #ffecec;
         }
-
         .quote-label {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            margin-bottom: 5px;
+            display: inline-block; padding: 4px 12px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: bold; margin-bottom: 5px;
         }
         .label-no-ship { background: #e3f2fd; color: #1976d2; }
         .label-with-ship { background: #e8f5e9; color: #388e3c; }
@@ -105,7 +118,7 @@
 <body>
 
 <div class="container">
-    <h2>🇰🇷 韓國小幫手の計算機</h2>
+    <h2>🇰🇷 小幫手の計算機</h2>
 
     <div class="section">
         <label>💰 商品韓幣標價 (KRW)</label>
@@ -115,14 +128,14 @@
     <div class="section">
         <label>🎁 代購品項</label>
         <select id="category" onchange="updateRateOptions()">
-            <option value="1" data-rates="5,8">1. 玩偶類 (5-8%)</option>
-            <option value="2" data-rates="8,10,15">2. 咖啡廳周邊 (8-15%)</option>
-            <option value="3" data-rates="5,8">3. 文創小吊飾 (5-8%)</option>
+            <option value="1" data-rates="5,6,7,8">1. 玩偶類 (5-8%)</option>
+            <option value="2" data-rates="8,9,10,12,15">2. 咖啡廳周邊 (8-15%)</option>
+            <option value="3" data-rates="5,6,7,8">3. 文創小吊飾 (5-8%)</option>
             <option value="4" data-rates="5">4. 明信片/貼紙 (5%)</option>
-            <option value="5" data-rates="5,8">5. 大創限定 (5-8%)</option>
-            <option value="6" data-rates="8,10">6. Olive Young (8-10%)</option>
-            <option value="9" data-rates="8,10">9. 杯盤 (請加處理費)</option>
-            <option value="11" data-rates="10,12">11. romand 限定 (10-12%)</option>
+            <option value="5" data-rates="5,6,7,8">5. 大創限定 (5-8%)</option>
+            <option value="6" data-rates="8,9,10">6. Olive Young (8-10%)</option>
+            <option value="9" data-rates="8,9,10">9. 杯盤 (需加處理費)</option>
+            <option value="11" data-rates="10,12,15">11. romand 限定 (10-15%)</option>
             <option value="13" data-rates="10,12">13. 鞋類/重物 (10-12%)</option>
         </select>
     </div>
@@ -136,7 +149,7 @@
             </label>
         </div>
         <div id="customRateBox" class="custom-fee-box">
-            <input type="number" id="customRateInput" inputmode="numeric" placeholder="輸入費率 (例如 12)" oninput="calculate()">
+            <input type="text" id="customRateInput" inputmode="numeric" placeholder="輸入費率 (例如 12)" oninput="calculate()">
         </div>
     </div>
 
@@ -144,25 +157,32 @@
         <div class="row" style="margin-bottom: 10px;">
             <div style="flex:1">
                 <label>📦 處理費 H (TWD)</label>
-                <input type="number" id="hCost" inputmode="numeric" value="0" oninput="calculate()">
+                <input type="text" id="hCost" inputmode="numeric" value="0" oninput="calculate()">
             </div>
         </div>
         <label class="checkbox-group">
             <input type="checkbox" id="includeShipping" onchange="toggleShipping()"> 加上台灣運費 S
         </label>
         <div id="shippingBox" class="shipping-box">
-            <input type="number" id="sCost" value="39" oninput="calculate()">
+            <input type="text" id="sCost" inputmode="numeric" value="39" oninput="calculate()">
         </div>
     </div>
 
     <div class="result-card">
         <div id="quoteStatus" class="quote-label label-no-ship">純商品報價</div>
         <div class="price-tag" id="totalDisplay">0<span>TWD</span></div>
-        <div id="minFeeWarning" class="warning">⚠️ 服務費不足 $50，已按 $50 計算</div>
+        <div id="minFeeWarning" style="color:red; font-size: 0.8rem; display:none; text-align:center;">⚠️ 服務費已按 $50 保底計算</div>
         
-        <div class="tip" id="detailText" style="margin-top: 10px; border-top: 1px solid #ddd; padding-top: 10px;">
-            請輸入金額開始計算
+        <div class="detail-text" id="detailText">
+            請輸入金額開始計算...
         </div>
+
+        <details id="profitDetails">
+            <summary> 📈 查看對內計算淨利</summary>
+            <div class="profit-content" id="profitContent">
+                請先輸入金額...
+            </div>
+        </details>
 
         <div class="formula-box" id="formulaDisplay">
             公式回報：等待輸入中...
@@ -171,7 +191,8 @@
 </div>
 
 <script>
-    const R = 45; 
+    const R_OUT = 42; // 對外報價匯率
+    const R_ACT = 45; // 對內實際匯率
     const M = 50; 
 
     function updateRateOptions() {
@@ -179,12 +200,10 @@
         const selected = category.options[category.selectedIndex];
         const rates = selected.getAttribute('data-rates').split(',');
         const rateSelect = document.getElementById('rateSelect');
-        
         rateSelect.innerHTML = '';
         rates.forEach(r => {
             let opt = document.createElement('option');
-            opt.value = r;
-            opt.innerHTML = r + '%';
+            opt.value = r; opt.innerHTML = r + '%';
             rateSelect.appendChild(opt);
         });
         calculate();
@@ -200,21 +219,13 @@
     function toggleShipping() {
         const hasShipping = document.getElementById('includeShipping').checked;
         document.getElementById('shippingBox').style.display = hasShipping ? 'block' : 'none';
-        
         const statusLabel = document.getElementById('quoteStatus');
-        if(hasShipping) {
-            statusLabel.innerText = "含運總計金額";
-            statusLabel.className = "quote-label label-with-ship";
-        } else {
-            statusLabel.innerText = "純商品報價";
-            statusLabel.className = "quote-label label-no-ship";
-        }
+        statusLabel.innerText = hasShipping ? "含運總計金額" : "純商品報價";
+        statusLabel.className = hasShipping ? "quote-label label-with-ship" : "quote-label label-no-ship";
         calculate();
     }
 
-    function roundToTen(num) {
-        return Math.round(num / 10) * 10;
-    }
+    function roundToTen(num) { return Math.round(num / 10) * 10; }
 
     function calculate() {
         const P = parseFloat(document.getElementById('krwInput').value) || 0;
@@ -232,43 +243,54 @@
 
         if (P <= 0) {
             document.getElementById('totalDisplay').innerHTML = '0<span>TWD</span>';
-            document.getElementById('detailText').innerHTML = '請輸入金額開始計算';
+            document.getElementById('detailText').innerHTML = '請輸入金額開始計算...';
+            document.getElementById('profitContent').innerHTML = '請輸入金額以計算淨利';
             document.getElementById('formulaDisplay').innerText = '公式回報：等待輸入中...';
-            document.getElementById('minFeeWarning').style.display = 'none';
             return;
         }
 
-        const twdBase = P / R;
-        let serviceFee = twdBase * r;
+        // --- 對外計算 (報價用) ---
+        const twdBaseOut = P / R_OUT;
+        let serviceFee = twdBaseOut * r;
         let isMinFeeUsed = false;
-
-        if (serviceFee < M) {
-            serviceFee = M;
-            isMinFeeUsed = true;
-            document.getElementById('minFeeWarning').style.display = 'block';
-        } else {
-            document.getElementById('minFeeWarning').style.display = 'none';
-        }
-
-        const rawTotal = twdBase + serviceFee + H + S;
-        const finalTotal = roundToTen(rawTotal);
-
-        document.getElementById('totalDisplay').innerHTML = `${finalTotal}<span>TWD</span>`;
+        if (serviceFee < M) { serviceFee = M; isMinFeeUsed = true; }
         
-        // 更新細節
+        const rawTotalOut = twdBaseOut + serviceFee + H + S;
+        const finalTotal = roundToTen(rawTotalOut);
+
+        // --- 對內計算 (淨利分析) ---
+        const twdBaseActual = P / R_ACT; 
+        const spreadProfit = twdBaseOut - twdBaseActual; 
+        const totalProfit = serviceFee + H + spreadProfit; 
+
+        // 更新 UI
+        document.getElementById('totalDisplay').innerHTML = `${finalTotal}<span>TWD</span>`;
+        document.getElementById('minFeeWarning').style.display = isMinFeeUsed ? 'block' : 'none';
+        
+        // 1. 保留並更新對外報價明細 (依照你的需求)
         document.getElementById('detailText').innerHTML = `
-            • 商品：$${twdBase.toFixed(1)}<br>
+            • 商品報價：$${twdBaseOut.toFixed(1)} (1:${R_OUT})<br>
             • 服務費：$${serviceFee.toFixed(1)} (${isMinFeeUsed ? '保底$50' : rPercent+'%'})<br>
-            • 其他：H $${H} / S $${S}
+            • 其他：處理費 $${H} / 運費 $${S}
         `;
 
-        // 更新公式回報 (實時顯示)
-        const feeStr = isMinFeeUsed ? `max(${twdBase.toFixed(0)}*${r}, 50)` : `(${twdBase.toFixed(0)}*${r})`;
-        let formulaText = `(${P}÷${R}) + ${feeStr}`;
+        // 2. 更新對內淨利區
+        document.getElementById('profitContent').innerHTML = `
+            <div class="profit-line"><span>實際商品成本 (1:${R_ACT})：</span><span>$${twdBaseActual.toFixed(0)}</span></div>
+            <div class="profit-line"><span>匯差收益：</span><span>+$${spreadProfit.toFixed(0)}</span></div>
+            <div class="profit-line"><span>服務費收益：</span><span>+$${serviceFee.toFixed(0)}</span></div>
+            <div class="profit-line"><span>處理費收益：</span><span>+$${H.toFixed(0)}</span></div>
+            <div class="profit-line" style="color:var(--profit-green); font-weight:bold; font-size:1.1rem; margin-top:5px; border-top:1px solid #eee; padding-top:5px;">
+                <span>💰 預估總淨利：</span><span>$${totalProfit.toFixed(0)}</span>
+            </div>
+        `;
+
+        // 3. 公式回報
+        const feeStr = isMinFeeUsed ? `max(${twdBaseOut.toFixed(0)}*${r}, 50)` : `(${twdBaseOut.toFixed(0)}*${r})`;
+        let formulaText = `(${P}÷${R_OUT}) + ${feeStr}`;
         if (H > 0) formulaText += ` + ${H}`;
         if (S > 0) formulaText += ` + ${S}`;
-        formulaText += ` = ${rawTotal.toFixed(1)} → 建議報價：${finalTotal}`;
-        
+        formulaText += ` = ${rawTotalOut.toFixed(1)} → 報價：${finalTotal}`;
         document.getElementById('formulaDisplay').innerText = `公式：${formulaText}`;
     }
 
